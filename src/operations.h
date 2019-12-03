@@ -1,7 +1,7 @@
 #ifndef LOGICAL_OPERATIONS
 #define LOGICAL_OPERATIONS
 
-namespace logical::operations {
+namespace logical {
 
     /**
      * Conventions:
@@ -24,68 +24,56 @@ namespace logical::operations {
     struct negate_t
     {
         template <typename P>
-        constexpr bool operator()(P&& predicate) const
+        static constexpr bool evaluate(P&& predicate)
         {
             return !predicate;
         }
     };
 
-    static constexpr negate_t negate;
-
     struct eq_t
     {
         template <typename L, typename R>
-        constexpr bool operator()(L&& left, R&& right) const
+        static constexpr bool evaluate(L&& left, R&& right)
         {
             return left == right;
         }
     };
 
-    static constexpr eq_t eq;
-
     struct neq_t
     {
         template <typename L, typename R>
-        constexpr bool operator()(L&& left, R&& right) const
+        static constexpr bool evaluate(L&& left, R&& right)
         {
-            return negate(eq(left, right));
+            return negate_t::evaluate(eq_t::evaluate(left, right));
         }
     };
-
-    static constexpr neq_t neq;
 
     struct conjunction_t
     {
         template <typename L, typename R>
-        constexpr bool operator()(L&& left, R&& right) const
+        static constexpr bool evaluate(L&& left, R&& right)
         {
             return left && right;
         }
     };
 
-    static constexpr conjunction_t conjunction;
-
     struct disjunction_t
     {
         template <typename L, typename R>
-        constexpr bool operator()(L&& left, R&& right) const
+        static constexpr bool evaluate(L&& left, R&& right)
         {
             return left || right;
         }
     };
 
-    static constexpr disjunction_t disjunction;
-
     struct conditional_t
     {
         template <typename C, typename L, typename R>
-        constexpr bool operator()(C&& condition, L&& left, R&& right) const
+        static constexpr bool evaluate(C&& condition, L&& left, R&& right)
         {
             return condition ? left : right;
         }
     };
-
-    static constexpr conditional_t conditional;
 
     /**
      * Mathematic operations:
@@ -99,46 +87,38 @@ namespace logical::operations {
     struct gt_t
     {
         template <typename L, typename R>
-        constexpr bool operator()(L&& left, R&& right) const
+        static constexpr bool evaluate(L&& left, R&& right)
         {
             return left > right;
         }
     };
 
-    static constexpr gt_t gt;
-
     struct gte_t
     {
         template <typename L, typename R>
-        constexpr bool operator()(L&& left, R&& right) const
+        static constexpr bool evaluate(L&& left, R&& right)
         {
-            return gt(left, right) && eq(left, right);
+            return gt_t::evaluate(left, right) && eq_t::evaluate(left, right);
         }
     };
-
-    static constexpr gte_t gte;
 
     struct lt_t
     {
         template <typename L, typename R>
-        constexpr bool operator()(L&& left, R&& right) const
+        static constexpr bool evaluate(L&& left, R&& right)
         {
             return left < right;
         }
     };
 
-    static constexpr lt_t lt;
-
     struct lte_t
     {
         template <typename L, typename R>
-        constexpr bool operator()(L&& left, R&& right) const
+        static constexpr bool evaluate(L&& left, R&& right)
         {
-            return lt(left, right) && eq(left, right);
+            return lt_t::evaluate(left, right) && eq_t::evaluate(left, right);
         }
     };
-
-    static constexpr lte_t lte;
 
 }
 
