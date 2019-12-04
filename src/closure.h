@@ -10,38 +10,21 @@ namespace logical {
     template <typename Op, typename... Args>
     struct closure_t
     {
-        constexpr closure_t(Args&&... args)
-            : args{ std::forward<Args>(args)... }
-        {}
-
-        constexpr operator bool() const
-        {
-            return std::apply([this](auto... args){ return Op::evaluate(args...); }, args);
-        }
-
-        std::tuple<Args...> args;
-    };
-
-    template <typename Op, typename... Args>
-    struct partial_closure_t
-    {
     private:
         static constexpr bool closure_callable = is_callable_v<Op, Args...>;
 
         template <typename... AdditionalArgs>
-        using enable_composition = std::enable_if_t<!closure_callable, partial_closure_t<Op, Args..., AdditionalArgs...>>;
-
-        template <typename Dummy>
-        using enable_evaluation = std::enable_if_t<closure_callable, Dummy>;
+        using enable_composition = std::enable_if_t<!closure_callable, closure_t<Op, Args..., AdditionalArgs...>>;
 
     public:
-        constexpr partial_closure_t(Args&&... args)
+        constexpr closure_t(Args&&... args)
             : args{ std::forward_as_tuple(std::forward<Args>(args)...) }
         {}
 
-        template <typename Dummy = bool, enable_evaluation<Dummy> = false>
         constexpr operator bool() const
         {
+            // FIXME: Convert this static_assert to template SFINAE
+            static_assert(closure_callable);
             return std::apply([this](auto... args){ return Op::evaluate(args...); }, args);
         }
 
@@ -57,6 +40,7 @@ namespace logical {
 
         std::tuple<Args...> args;
     };
+    
 }
 
 #endif // LOGICAL_CLOSURE

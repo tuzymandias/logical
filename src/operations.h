@@ -6,8 +6,8 @@ namespace logical {
     /**
      * Conventions:
      * Let op be the name of the operation, then:
-     * <op>_t is the type of the operation, it implements the operation
-     * <op> is an instantiation of <op>_t
+     * <op>_t is the type of the operation
+     * <op>_t::evaluate(...) is a static function that implements the operation
      */
 
     /**
