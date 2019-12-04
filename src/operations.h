@@ -98,7 +98,7 @@ namespace logical {
         template <typename L, typename R>
         static constexpr bool evaluate(L&& left, R&& right)
         {
-            return gt_t::evaluate(left, right) && eq_t::evaluate(left, right);
+            return gt_t::evaluate(left, right) || eq_t::evaluate(left, right);
         }
     };
 
@@ -116,7 +116,7 @@ namespace logical {
         template <typename L, typename R>
         static constexpr bool evaluate(L&& left, R&& right)
         {
-            return lt_t::evaluate(left, right) && eq_t::evaluate(left, right);
+            return lt_t::evaluate(left, right) || eq_t::evaluate(left, right);
         }
     };
 
