@@ -11,10 +11,23 @@ constexpr auto bind_##op(Args&&... args) \
     return bind<op##_t>(std::forward<Args>(args)...); \
 }
 
+#define BIND_PARTIAL_IMPL(op) \
+template <typename... Args> \
+constexpr auto bind_partial_##op(Args&&... args) \
+{ \
+    return bind_partial<op##_t>(std::forward<Args>(args)...); \
+}
+
 namespace logical {
 
     template <typename Op, typename... Args>
     constexpr closure_t<Op, Args...> bind(Args&&... args)
+    {
+        return { std::forward<Args>(args)... };
+    }
+
+    template <typename Op, typename... Args>
+    constexpr partial_closure_t<Op, Args...> bind_partial(Args&&... args)
     {
         return { std::forward<Args>(args)... };
     }

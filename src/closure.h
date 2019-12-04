@@ -3,6 +3,8 @@
 
 #include <tuple>
 
+#include "type_traits.h"
+
 namespace logical {
 
     template <typename Op, typename... Args>
@@ -20,6 +22,41 @@ namespace logical {
         std::tuple<Args...> args;
     };
 
+    template <typename Op, typename... Args>
+    struct partial_closure_t
+    {
+    private:
+        static constexpr bool closure_callable = is_callable_v<Op, Args...>;
+
+        template <typename... AdditionalArgs>
+        using enable_composition = std::enable_if_t<!closure_callable, partial_closure_t<Op, Args..., AdditionalArgs...>>;
+
+        template <typename Dummy>
+        using enable_evaluation = std::enable_if_t<closure_callable, Dummy>;
+
+    public:
+        constexpr partial_closure_t(Args&&... args)
+            : args{ std::forward_as_tuple(std::forward<Args>(args)...) }
+        {}
+
+        template <typename Dummy = bool, enable_evaluation<Dummy> = false>
+        constexpr operator bool() const
+        {
+            return std::apply([this](auto... args){ return Op::evaluate(args...); }, args);
+        }
+
+        template <typename... AdditionalArgs>
+        constexpr auto operator()(AdditionalArgs&&... additional_args) const
+            -> enable_composition<AdditionalArgs...>
+        {
+            return std::apply(
+                [this](auto&&... args) { return enable_composition<AdditionalArgs...>{ std::forward<decltype(args)>(args)... }; },
+                std::tuple_cat(args, std::forward_as_tuple(std::forward<AdditionalArgs>(additional_args)...))
+            );
+        }
+
+        std::tuple<Args...> args;
+    };
 }
 
 #endif // LOGICAL_CLOSURE
