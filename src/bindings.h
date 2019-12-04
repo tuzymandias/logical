@@ -31,11 +31,8 @@ namespace logical {
     BIND_IMPL(lt)
     BIND_IMPL(lte)
 
-    static_assert(bind_eq(true, true));
-    static_assert(bind_lt(10, 100u));
-    static_assert(bind_eq(bind_negate(false), true));    
 }
 
 #undef BIND_IMPL
 
-#endif // LOGICA_BINDINGS
+#endif // LOGICAL_BINDINGS

@@ -3,4 +3,6 @@
 
 # Except
 !.gitignore
+!CMakeLists.txt
 !src/
+!tests/
