@@ -120,6 +120,24 @@ namespace logical {
         }
     };
 
+    struct within_closed_interval_t
+    {
+        template <typename IntervalL, typename IntervalR, typename Value>
+        static constexpr bool evaluate(IntervalL&& l, IntervalR&& r, Value&& val)
+        {
+            return gte_t::evaluate(r, val) && lte_t::evaluate(l, val);
+        }
+    };
+
+    struct within_open_interval_t
+    {
+        template <typename IntervalL, typename IntervalR, typename Value>
+        static constexpr bool evaluate(IntervalL&& l, IntervalR&& r, Value&& val)
+        {
+            return gt_t::evaluate(r, val) && lt_t::evaluate(l, val);
+        }
+    };
+
 }
 
 #endif // LOGICAL_OPERATIONS

@@ -30,6 +30,8 @@ namespace logical {
     BIND_IMPL(gte)
     BIND_IMPL(lt)
     BIND_IMPL(lte)
+    BIND_IMPL(within_closed_interval)
+    BIND_IMPL(within_open_interval)
 
 }
 
