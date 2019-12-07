@@ -5,6 +5,9 @@
 !.gitignore
 !CMakeLists.txt
 !src/
+!src/*
 !tests/
+!tests/*
 !examples/
+!examples/*
 !README.md
