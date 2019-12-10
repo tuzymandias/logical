@@ -1,5 +1,6 @@
 #include <iostream>
 
+#define LOGICAL_SHORTEN_NAMESPACE
 #include "src/bindings.h"
 
 namespace geom {
@@ -19,10 +20,9 @@ namespace geom {
 
     constexpr bool WithinSquare1(const Square& square, const Point& point)
     {
-        using namespace logical;
-        const auto within_width  = conjunction(gte(point.x, square.origin.x), lte(point.x, square.origin.x + square.width));
-        const auto within_height = conjunction(gte(point.y, square.origin.y), lte(point.y, square.origin.y + square.height));
-        const auto within_square = conjunction(within_height, within_width);
+        const auto within_width  = lgc::conjunction(lgc::gte(point.x, square.origin.x), lgc::lte(point.x, square.origin.x + square.width));
+        const auto within_height = lgc::conjunction(lgc::gte(point.y, square.origin.y), lgc::lte(point.y, square.origin.y + square.height));
+        const auto within_square = lgc::conjunction(within_height, within_width);
         return within_square;
     }
 

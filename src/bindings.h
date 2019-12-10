@@ -37,4 +37,10 @@ namespace logical {
 
 #undef BIND_IMPL
 
+#ifdef LOGICAL_SHORTEN_NAMESPACE
+namespace lgc {
+    using namespace logical;
+}
+#endif
+
 #endif // LOGICAL_BINDINGS
