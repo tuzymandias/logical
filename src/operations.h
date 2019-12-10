@@ -77,11 +77,13 @@ namespace logical {
 
     /**
      * Mathematic operations:
-     * <op  > - <arity  > / <description        >
-     *  gt    -  binary   /  computes a > b
-     *  gte   -  binary   /  computes a >= b
-     *  lt    -  binary   /  computes a < b
-     *  lte   -  binary   /  computes a <= b
+     * <op                    > - <arity  > / <description               >
+     *  gt                      -  binary   /  computes a > b
+     *  gte                     -  binary   /  computes a >= b
+     *  lt                      -  binary   /  computes a < b
+     *  lte                     -  binary   /  computes a <= b
+     *  within_closed_interval  -  ternary  /  computes if c is in [a, b]
+     *  within_open_interval    -  ternary  /  computes if c is in (a, b)
      */
 
     struct gt_t
