@@ -6,7 +6,7 @@
 
 #define BIND_IMPL(op) \
 template <typename... Args> \
-constexpr auto bind_##op(Args&&... args) \
+constexpr auto op(Args&&... args) \
 { \
     return bind<op##_t>(std::forward<Args>(args)...); \
 }
