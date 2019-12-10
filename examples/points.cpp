@@ -19,11 +19,12 @@ namespace geom {
 
     constexpr bool WithinSquare1(const Square& square, const Point& point)
     {
-        const auto within_width  = logical::bind_conjunction(logical::bind_gte(point.x, square.origin.x), 
-                                                             logical::bind_lte(point.x, square.origin.x + square.width));
-        const auto within_height = logical::bind_conjunction(logical::bind_gte(point.y, square.origin.y), 
-                                                             logical::bind_lte(point.y, square.origin.y + square.height));
-        const auto within_square = logical::bind_conjunction(within_height, within_width);
+        using namespace logical;
+        const auto within_width  = bind_conjunction(bind_gte(point.x, square.origin.x), 
+                                                    bind_lte(point.x, square.origin.x + square.width));
+        const auto within_height = bind_conjunction(bind_gte(point.y, square.origin.y), 
+                                                    bind_lte(point.y, square.origin.y + square.height));
+        const auto within_square = bind_conjunction(within_height, within_width);
         return within_square;
     }
 
