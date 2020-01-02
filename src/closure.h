@@ -21,13 +21,22 @@ namespace logical {
             : args{ std::forward_as_tuple(std::forward<Args>(args)...) }
         {}
 
-        constexpr operator bool() const
+        // Allow implicit conversion of closure_t to return type of operation
+        template <typename T = return_type_if_callable<Op, Args...>>
+        constexpr operator typename T::type() const
         {
-            // FIXME: Convert this static_assert to template SFINAE
             static_assert(closure_callable);
             return std::apply([this](auto... args){ return Op::evaluate(args...); }, args);
         }
 
+        // Allow implicit conversion of closure_t to types that are implicitly convertible from return type of operation
+        template <typename T>
+        constexpr operator T() const
+        {
+            return static_cast<return_type_if_callable_t<Op, Args...>>(*this);
+        }
+
+        // Allow currying if type is not callable
         template <typename... AdditionalArgs>
         constexpr auto operator()(AdditionalArgs&&... additional_args) const
             -> enable_composition<AdditionalArgs...>

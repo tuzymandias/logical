@@ -77,7 +77,7 @@ namespace logical {
     };
 
     /**
-     * Mathematic operations:
+     * Mathematical comparisons:
      * <op                    > - <arity  > / <description               >
      *  gt                      -  binary   /  computes a > b
      *  gte                     -  binary   /  computes a >= b
