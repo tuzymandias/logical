@@ -1,5 +1,6 @@
 #ifndef LOGICAL_OPERATIONS
 #define LOGICAL_OPERATIONS
+#include <utility>
 
 namespace logical {
 
@@ -26,7 +27,7 @@ namespace logical {
         template <typename P>
         static constexpr bool evaluate(P&& predicate)
         {
-            return !predicate;
+            return !std::forward<P>(predicate);
         }
     };
 
@@ -35,7 +36,7 @@ namespace logical {
         template <typename L, typename R>
         static constexpr bool evaluate(L&& left, R&& right)
         {
-            return left == right;
+            return std::forward<L>(left) == std::forward<R>(right);
         }
     };
 
@@ -44,7 +45,7 @@ namespace logical {
         template <typename L, typename R>
         static constexpr bool evaluate(L&& left, R&& right)
         {
-            return negate_t::evaluate(eq_t::evaluate(left, right));
+            return negate_t::evaluate(eq_t::evaluate(std::forward<L>(left), std::forward<R>(right)));
         }
     };
 
@@ -53,7 +54,7 @@ namespace logical {
         template <typename L, typename R>
         static constexpr bool evaluate(L&& left, R&& right)
         {
-            return left && right;
+            return std::forward<L>(left) && std::forward<R>(right);
         }
     };
 
@@ -62,7 +63,7 @@ namespace logical {
         template <typename L, typename R>
         static constexpr bool evaluate(L&& left, R&& right)
         {
-            return left || right;
+            return std::forward<L>(left) || std::forward<R>(right);
         }
     };
 
@@ -71,7 +72,7 @@ namespace logical {
         template <typename C, typename L, typename R>
         static constexpr bool evaluate(C&& condition, L&& left, R&& right)
         {
-            return condition ? left : right;
+            return std::forward<C>(condition) ? std::forward<L>(left) : std::forward<R>(right);
         }
     };
 
@@ -91,7 +92,7 @@ namespace logical {
         template <typename L, typename R>
         static constexpr bool evaluate(L&& left, R&& right)
         {
-            return left > right;
+            return std::forward<L>(left) > std::forward<R>(right);
         }
     };
 
@@ -100,7 +101,7 @@ namespace logical {
         template <typename L, typename R>
         static constexpr bool evaluate(L&& left, R&& right)
         {
-            return gt_t::evaluate(left, right) || eq_t::evaluate(left, right);
+            return gt_t::evaluate(std::forward<L>(left), std::forward<R>(right)) || eq_t::evaluate(std::forward<L>(left), std::forward<R>(right));
         }
     };
 
@@ -109,7 +110,7 @@ namespace logical {
         template <typename L, typename R>
         static constexpr bool evaluate(L&& left, R&& right)
         {
-            return left < right;
+            return std::forward<L>(left) < std::forward<R>(right);
         }
     };
 
@@ -118,7 +119,7 @@ namespace logical {
         template <typename L, typename R>
         static constexpr bool evaluate(L&& left, R&& right)
         {
-            return lt_t::evaluate(left, right) || eq_t::evaluate(left, right);
+            return lt_t::evaluate(std::forward<L>(left), std::forward<R>(right)) || eq_t::evaluate(std::forward<L>(left), std::forward<R>(right));
         }
     };
 
@@ -127,7 +128,7 @@ namespace logical {
         template <typename IntervalL, typename IntervalR, typename Value>
         static constexpr bool evaluate(IntervalL&& l, IntervalR&& r, Value&& val)
         {
-            return gte_t::evaluate(r, val) && lte_t::evaluate(l, val);
+            return gte_t::evaluate(std::forward<IntervalR>(r), std::forward<Value>(val)) && lte_t::evaluate(std::forward<IntervalL>(l), std::forward<Value>(val));
         }
     };
 
@@ -136,7 +137,7 @@ namespace logical {
         template <typename IntervalL, typename IntervalR, typename Value>
         static constexpr bool evaluate(IntervalL&& l, IntervalR&& r, Value&& val)
         {
-            return gt_t::evaluate(r, val) && lt_t::evaluate(l, val);
+            return gt_t::evaluate(std::forward<IntervalR>(r), std::forward<Value>(val)) && lt_t::evaluate(std::forward<IntervalL>(l), std::forward<Value>(val));
         }
     };
 
