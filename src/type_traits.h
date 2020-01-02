@@ -5,20 +5,28 @@
 
 namespace logical
 {
+    /**
+     * is_callable: 
+     * a type trait to test if 'Op::evaluate(...)' can be called using the variadic template parameters as arguments
+     */
     template <typename Op, typename... Args>
     class is_callable
     {
     private:
-        template <typename C> static std::true_type  test(decltype(&C::template evaluate<Args...>));
-        template <typename C> static std::false_type test(...);
+        template <typename C> static constexpr bool test(decltype(&C::template evaluate<Args...>)) { return true; };
+        template <typename C> static constexpr bool test(...) { return false; };
 
     public:
-        static constexpr bool value = std::is_same_v<decltype(test<Op>(0)), std::true_type>;
+        static constexpr bool value = test<Op>(0);
     };
 
     template <typename Op, typename... Args>
     static constexpr bool is_callable_v = is_callable<Op, Args...>::value;
 
+    /**
+     * return_type_if_callable:
+     * a type trait that provides the return type of 'Op::evaluate(Args...)' if the function exists
+     */
     template <bool Enabled, typename Op, typename... Args>
     struct return_type_if_callable_h
     {};

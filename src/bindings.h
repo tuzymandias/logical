@@ -33,6 +33,12 @@ namespace logical {
     BIND_IMPL(within_closed_interval)
     BIND_IMPL(within_open_interval)
 
+    BIND_IMPL(add)
+    BIND_IMPL(sub)
+    BIND_IMPL(mul)
+    BIND_IMPL(div)
+    BIND_IMPL(mod)
+
 }
 
 #undef BIND_IMPL

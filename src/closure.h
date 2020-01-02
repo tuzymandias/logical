@@ -47,6 +47,128 @@ namespace logical {
             );
         }
 
+        // Operator overloads
+        template <typename Rhs>
+        constexpr auto operator==(Rhs&& rhs) const
+        {
+            return static_cast<return_type_if_callable_t<Op, Args...>>(*this) == std::forward<Rhs>(rhs);
+        }
+
+        template <typename Rhs>
+        constexpr auto operator!=(Rhs&& rhs) const
+        {
+            return static_cast<return_type_if_callable_t<Op, Args...>>(*this) == std::forward<Rhs>(rhs);
+        }
+
+        template <typename Rhs>
+        constexpr auto operator< (Rhs&& rhs) const
+        {
+            return static_cast<return_type_if_callable_t<Op, Args...>>(*this) < std::forward<Rhs>(rhs);
+        }
+
+        template <typename Rhs>
+        constexpr auto operator> (Rhs&& rhs) const
+        {
+            return !(*this == std::forward<Rhs>(rhs)) && !(*this < std::forward<Rhs>(rhs));
+        }
+
+        template <typename Rhs>
+        constexpr auto operator<=(Rhs&& rhs) const
+        {
+            return (*this < std::forward<Rhs>(rhs)) || (*this == std::forward<Rhs>(rhs));
+        }
+
+        template <typename Rhs>
+        constexpr auto operator>=(Rhs&& rhs) const
+        {
+            return (*this > std::forward<Rhs>(rhs)) || (*this == std::forward<Rhs>(rhs));
+        }
+
+        template <typename Rhs>
+        constexpr auto operator+ (Rhs&& rhs) const
+        {
+            return static_cast<return_type_if_callable_t<Op, Args...>>(*this) + std::forward<Rhs>(rhs);
+        }
+
+        template <typename Rhs>
+        constexpr auto operator- (Rhs&& rhs) const
+        {
+            return static_cast<return_type_if_callable_t<Op, Args...>>(*this) - std::forward<Rhs>(rhs);
+        }
+
+        template <typename Rhs>
+        constexpr auto operator* (Rhs&& rhs) const
+        {
+            return static_cast<return_type_if_callable_t<Op, Args...>>(*this) * std::forward<Rhs>(rhs);
+        }
+
+        template <typename Rhs>
+        constexpr auto operator/ (Rhs&& rhs) const
+        {
+            return static_cast<return_type_if_callable_t<Op, Args...>>(*this) / std::forward<Rhs>(rhs);
+        }
+
+        // Friend operator overloads
+        template <typename Lhs>
+        friend constexpr auto operator==(Lhs&& lhs, const closure_t& closure)
+        {
+            return closure == std::forward<Lhs>(lhs);
+        }
+
+        template <typename Lhs>
+        friend constexpr auto operator!=(Lhs&& lhs, const closure_t& closure)
+        {
+            return closure != std::forward<Lhs>(lhs);
+        }
+
+        template <typename Lhs>
+        friend constexpr auto operator< (Lhs&& lhs, const closure_t& closure)
+        {
+            return closure >= std::forward<Lhs>(lhs);
+        }
+
+        template <typename Lhs>
+        friend constexpr auto operator> (Lhs&& lhs, const closure_t& closure)
+        {
+            return closure <= std::forward<Lhs>(lhs);
+        }
+
+        template <typename Lhs>
+        friend constexpr auto operator<=(Lhs&& lhs, const closure_t& closure)
+        {
+            return closure > std::forward<Lhs>(lhs);
+        }
+
+        template <typename Lhs>
+        friend constexpr auto operator>=(Lhs&& lhs, const closure_t& closure)
+        {
+            return closure < std::forward<Lhs>(lhs);
+        }
+
+        template <typename Lhs>
+        friend constexpr auto operator+ (Lhs&& lhs, const closure_t& closure)
+        {
+            return closure + std::forward<Lhs>(lhs);
+        }
+
+        template <typename Lhs>
+        friend constexpr auto operator- (Lhs&& lhs, const closure_t& closure)
+        {
+            return std::forward<Lhs>(lhs) - static_cast<return_type_if_callable_t<Op, Args...>>(closure);
+        }
+
+        template <typename Lhs>
+        friend constexpr auto operator* (Lhs&& lhs, const closure_t& closure)
+        {
+            return closure * std::forward<Lhs>(lhs);
+        }
+
+        template <typename Lhs>
+        friend constexpr auto operator/ (Lhs&& lhs, const closure_t& closure)
+        {
+            return std::forward<Lhs>(lhs) / static_cast<return_type_if_callable_t<Op, Args...>>(closure);
+        }
+
         std::tuple<Args...> args;
     };
     

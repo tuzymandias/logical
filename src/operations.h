@@ -141,6 +141,61 @@ namespace logical {
         }
     };
 
+    /**
+     * Arithmetic operations:
+     * <op > - <arity  > / <description               >
+     *  add  -  binary   /  computes a + b
+     *  sub  -  binary   /  computes a - b
+     *  mul  -  binary   /  computes a * b
+     *  div  -  binary   /  computes a / b
+     */
+
+    struct add_t
+    {
+        template <typename L, typename R>
+        static constexpr auto evaluate(L&& l, R&& r)
+        {
+            return std::forward<L>(l) + std::forward<R>(r);
+        }
+    };
+
+    struct sub_t
+    {
+        template <typename L, typename R>
+        static constexpr auto evaluate(L&& l, R&& r)
+        {
+            return std::forward<L>(l) - std::forward<R>(r);
+        }
+    };
+
+    struct mul_t
+    {
+        template <typename L, typename R>
+        static constexpr auto evaluate(L&& l, R&& r)
+        {
+            return std::forward<L>(l) * std::forward<R>(r);
+        }
+    };
+
+    struct div_t
+    {
+        template <typename L, typename R>
+        static constexpr auto evaluate(L&& l, R&& r)
+        {
+            return std::forward<L>(l) / std::forward<R>(r);
+        }
+    };
+
+    struct mod_t
+    {
+        template <typename L, typename R>
+        static constexpr auto evaluate(L&& l, R&& r)
+        {
+            return std::forward<L>(l) % std::forward<R>(r);
+        }
+    };
+
+
 }
 
 #endif // LOGICAL_OPERATIONS

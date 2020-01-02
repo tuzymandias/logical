@@ -20,10 +20,10 @@ namespace geom {
     constexpr bool WithinSquare1(const Square& square, const Point& point)
     {
         using namespace logical;
-        const auto within_width  = bind_conjunction(bind_gte(point.x, square.origin.x), 
-                                                    bind_lte(point.x, square.origin.x + square.width));
-        const auto within_height = bind_conjunction(bind_gte(point.y, square.origin.y), 
-                                                    bind_lte(point.y, square.origin.y + square.height));
+        const auto square_max_x = bind_add(square.origin.x, square.width);
+        const auto square_max_y = bind_add(square.origin.y, square.height);
+        const auto within_width  = bind_conjunction(bind_gte(point.x, square.origin.x), bind_lte(point.x, square_max_x));
+        const auto within_height = bind_conjunction(bind_gte(point.y, square.origin.y), bind_lte(point.y, square_max_y));
         const auto within_square = bind_conjunction(within_height, within_width);
         return within_square;
     }
